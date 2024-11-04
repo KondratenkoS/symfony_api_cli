@@ -1,0 +1,26 @@
+version: '3.5'
+
+services:
+  server:
+    container_name: cli_server
+    build:
+      context: .
+      dockerfile: docker/server/Dockerfile
+    ports:
+      - '8090:80'
+    volumes:
+      - ./:/var/www/app
+      - ./docker/server/sites-enabled:/etc/apache2/sites-enabled
+      - ./docker/server/php.ini:/usr/local/etc/php/conf.d/php.ini
+    networks:
+      - internal
+    working_dir: /var/www/app
+
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.99.0/28
